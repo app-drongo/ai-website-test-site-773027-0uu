@@ -1,30 +1,34 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { ArrowRight, CheckCircle, Zap, Shield } from 'lucide-react';
+import { Card, CardContent } from '@/components/ui/card';
+import { ArrowRight, Play, Star, Users, Zap } from 'lucide-react';
 import Image from 'next/image';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useSmartNavigation } from '@/hooks/useSmartNavigation';
 
 const DEFAULT_HERO = {
-  title: 'Technology That Just Works',
+  logoUrl:
+    'https://images.unsplash.com/photo-1611224923853-80b023f02d71?w=120&h=40&fit=crop&crop=center',
+  logoAlt: 'Company Logo',
+  badge: 'New Release',
+  title: 'Build the Future with AI-Powered Development',
   subtitle:
-    'Simple, powerful solutions built for real people. No complexity, no confusion—just reliable technology that seamlessly fits into your workflow.',
-  ctaText: 'Get Started',
-  ctaHref: '/start',
-  secondaryCtaText: 'Learn More',
-  secondaryCtaHref: '/about',
-  imageUrl:
-    'https://images.unsplash.com/photo-1551434678-e076c223a692?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80',
-  imageAlt: 'Clean, modern technology workspace',
-  features: [
-    'Intuitive design that makes sense',
-    'Reliable performance you can trust',
-    'Smart automation that saves time',
+    'Transform your ideas into production-ready applications with our cutting-edge platform. Ship faster, scale better, innovate continuously.',
+  primaryCtaText: 'Start Building',
+  primaryCtaHref: '/signup',
+  secondaryCtaText: 'Watch Demo',
+  secondaryCtaHref: '/demo',
+  heroImageUrl:
+    'https://images.unsplash.com/photo-1551434678-e076c223a692?w=800&h=600&fit=crop&crop=center',
+  heroImageAlt: 'Development platform dashboard',
+  stats: [
+    { icon: 'Users', value: '50K+', label: 'Developers' },
+    { icon: 'Star', value: '4.9', label: 'Rating' },
+    { icon: 'Zap', value: '99.9%', label: 'Uptime' },
   ],
-  trustBadge: 'Trusted by 10,000+ teams',
+  features: ['AI-powered code generation', 'Real-time collaboration', 'Enterprise security'],
 } as const;
 
 type HeroProps = Partial<typeof DEFAULT_HERO>;
@@ -32,112 +36,150 @@ type HeroProps = Partial<typeof DEFAULT_HERO>;
 export default function Hero(props: HeroProps) {
   const config = { ...DEFAULT_HERO, ...props };
   const navigate = useSmartNavigation();
-  const [isVisible, setIsVisible] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(false);
 
-  useEffect(() => {
-    setIsVisible(true);
-  }, []);
-
-  const handlePrimaryClick = () => {
-    navigate(config.ctaHref);
+  const handlePrimaryAction = () => {
+    navigate(config.primaryCtaHref);
   };
 
-  const handleSecondaryClick = () => {
+  const handleSecondaryAction = () => {
+    setIsPlaying(true);
     navigate(config.secondaryCtaHref);
   };
 
-  return (
-    <section id="hero" className="bg-background text-foreground py-20 lg:py-32 overflow-hidden">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid gap-12 lg:gap-20 lg:grid-cols-2 items-center">
-          {/* Content */}
-          <div
-            className={`space-y-8 transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
-          >
-            {/* Trust Badge */}
-            <div className="flex items-center gap-2">
-              <Badge variant="secondary" className="bg-muted text-muted-foreground px-3 py-1">
-                <Shield className="w-3 h-3 mr-1" />
-                <span data-editable="trustBadge">{config.trustBadge}</span>
-              </Badge>
-            </div>
+  const getStatIcon = (iconName: string) => {
+    switch (iconName) {
+      case 'Users':
+        return <Users className="h-5 w-5" />;
+      case 'Star':
+        return <Star className="h-5 w-5" />;
+      case 'Zap':
+        return <Zap className="h-5 w-5" />;
+      default:
+        return <Zap className="h-5 w-5" />;
+    }
+  };
 
-            {/* Headline */}
-            <div className="space-y-4">
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight">
+  return (
+    <section id="hero" className="bg-background text-foreground">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Header with Logo */}
+        <div className="pt-8 pb-4">
+          <div className="flex items-center justify-center sm:justify-start">
+            <Image
+              src={config.logoUrl}
+              alt={config.logoAlt}
+              width={120}
+              height={40}
+              className="h-10 w-auto"
+              data-editable-src="logoUrl"
+            />
+          </div>
+        </div>
+
+        {/* Main Hero Content */}
+        <div className="py-20 lg:py-32">
+          <div className="grid gap-12 lg:grid-cols-2 lg:gap-16 items-center">
+            {/* Left Column - Content */}
+            <div className="text-center lg:text-left">
+              {/* Badge */}
+              <div className="mb-6">
+                <Badge
+                  variant="secondary"
+                  className="bg-primary/10 text-primary border-primary/20 hover:bg-primary/20 transition-colors"
+                >
+                  <span data-editable="badge">{config.badge}</span>
+                </Badge>
+              </div>
+
+              {/* Title */}
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight mb-6">
                 <span data-editable="title">{config.title}</span>
               </h1>
-              <p className="text-lg sm:text-xl text-muted-foreground leading-relaxed max-w-2xl">
+
+              {/* Subtitle */}
+              <p className="text-lg sm:text-xl text-muted-foreground mb-8 max-w-2xl mx-auto lg:mx-0">
                 <span data-editable="subtitle">{config.subtitle}</span>
               </p>
+
+              {/* CTA Buttons */}
+              <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start mb-12">
+                <Button
+                  size="lg"
+                  onClick={handlePrimaryAction}
+                  className="bg-primary text-primary-foreground hover:bg-primary/90 transition-colors"
+                  data-editable-href="primaryCtaHref"
+                  data-href={config.primaryCtaHref}
+                >
+                  <span data-editable="primaryCtaText">{config.primaryCtaText}</span>
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </Button>
+
+                <Button
+                  variant="outline"
+                  size="lg"
+                  onClick={handleSecondaryAction}
+                  className="border-border hover:bg-accent hover:text-accent-foreground transition-colors"
+                  data-editable-href="secondaryCtaHref"
+                  data-href={config.secondaryCtaHref}
+                >
+                  <Play className={`mr-2 h-4 w-4 ${isPlaying ? 'animate-pulse' : ''}`} />
+                  <span data-editable="secondaryCtaText">{config.secondaryCtaText}</span>
+                </Button>
+              </div>
+
+              {/* Features List */}
+              <div className="hidden sm:block">
+                <ul className="flex flex-wrap gap-6 justify-center lg:justify-start text-sm text-muted-foreground">
+                  {config.features.map((feature, idx) => (
+                    <li key={idx} className="flex items-center">
+                      <div className="w-1.5 h-1.5 bg-primary rounded-full mr-2" />
+                      <span data-editable={`features[${idx}]`}>{feature}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </div>
 
-            {/* Features */}
-            <div className="space-y-3">
-              {config.features.map((feature, idx) => (
-                <div key={idx} className="flex items-center gap-3">
-                  <CheckCircle className="w-5 h-5 text-primary flex-shrink-0" />
-                  <span className="text-foreground" data-editable={`features[${idx}]`}>
-                    {feature}
-                  </span>
-                </div>
-              ))}
-            </div>
-
-            {/* CTAs */}
-            <div className="flex flex-col sm:flex-row gap-4">
-              <Button
-                size="lg"
-                onClick={handlePrimaryClick}
-                data-editable-href="ctaHref"
-                data-href={config.ctaHref}
-                className="bg-primary text-primary-foreground hover:bg-primary/90 px-8 py-3 text-lg group"
-              >
-                <span data-editable="ctaText">{config.ctaText}</span>
-                <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
-              </Button>
-
-              <Button
-                variant="outline"
-                size="lg"
-                onClick={handleSecondaryClick}
-                data-editable-href="secondaryCtaHref"
-                data-href={config.secondaryCtaHref}
-                className="border-border text-foreground hover:bg-accent hover:text-accent-foreground px-8 py-3 text-lg"
-              >
-                <span data-editable="secondaryCtaText">{config.secondaryCtaText}</span>
-              </Button>
-            </div>
-          </div>
-
-          {/* Visual */}
-          <div
-            className={`relative transition-all duration-1000 delay-300 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
-          >
-            <Card className="bg-card border-border overflow-hidden">
-              <CardContent className="p-0">
-                <div className="relative">
+            {/* Right Column - Image */}
+            <div className="relative">
+              <Card className="bg-card border-border overflow-hidden">
+                <CardContent className="p-0">
                   <Image
-                    src={config.imageUrl}
-                    alt={config.imageAlt}
-                    data-editable-src="imageUrl"
-                    width={600}
-                    height={400}
+                    src={config.heroImageUrl}
+                    alt={config.heroImageAlt}
+                    width={800}
+                    height={600}
                     className="w-full h-auto object-cover"
+                    data-editable-src="heroImageUrl"
                     priority
                   />
+                </CardContent>
+              </Card>
 
-                  {/* Floating accent */}
-                  <div className="absolute top-6 right-6 bg-primary text-primary-foreground p-3 rounded-lg shadow-lg">
-                    <Zap className="w-6 h-6" />
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Background decoration */}
-            <div className="absolute -top-4 -right-4 w-24 h-24 bg-accent/20 rounded-full blur-xl -z-10"></div>
-            <div className="absolute -bottom-6 -left-6 w-32 h-32 bg-primary/10 rounded-full blur-2xl -z-10"></div>
+              {/* Floating Stats */}
+              <div className="absolute -bottom-6 left-4 right-4">
+                <Card className="bg-card/95 backdrop-blur-sm border-border shadow-lg">
+                  <CardContent className="p-4">
+                    <div className="grid grid-cols-3 gap-4">
+                      {config.stats.map((stat, idx) => (
+                        <div key={idx} className="text-center">
+                          <div className="flex justify-center mb-1 text-primary">
+                            {getStatIcon(stat.icon)}
+                          </div>
+                          <div className="font-bold text-foreground">
+                            <span data-editable={`stats[${idx}].value`}>{stat.value}</span>
+                          </div>
+                          <div className="text-xs text-muted-foreground">
+                            <span data-editable={`stats[${idx}].label`}>{stat.label}</span>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+            </div>
           </div>
         </div>
       </div>
