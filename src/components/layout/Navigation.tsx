@@ -8,7 +8,8 @@ import { useState } from 'react';
 import { useSmartNavigation } from '@/hooks/useSmartNavigation';
 
 const DEFAULT_NAVIGATION = {
-  logoUrl: 'https://images.unsplash.com/photo-1611224923853-80b023f02d71?w=120&h=40&fit=crop&q=80',
+  logoUrl:
+    'https://pub-60de11c8c43b49ea9bd786eb6273aa91.r2.dev/1ab78fd211b49485c52b0e88f8d42c98.png',
   logoAlt: 'TechFlow Logo',
   brandName: 'TechFlow',
   brandHref: '/',
